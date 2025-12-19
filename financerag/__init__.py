@@ -3,6 +3,11 @@ from .retrieval import (
     BM25Retriever,
     SentenceTransformerEncoder
 )
+from .embedding import (
+    EmbeddingConfig,
+    embed_task,
+    embed_tasks,
+)
 
 from .rerank import (
     CrossEncoderReranker

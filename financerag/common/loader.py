@@ -175,13 +175,19 @@ class HFDataLoader:
             corpus_ds = load_dataset(
                 "json",
                 data_files=self.corpus_file,
+                split="train",  # ensure Dataset (not DatasetDict) for local files
                 streaming=self.streaming,
                 keep_in_memory=self.keep_in_memory,
             )
 
         corpus_ds = cast(Dataset, corpus_ds)
-        corpus_ds = corpus_ds.cast_column("_id", Value("string"))
-        corpus_ds = corpus_ds.rename_column("_id", "id")
+        # Some local files already use "id"; keep compatibility with "_id"
+        if "_id" in corpus_ds.column_names:
+            corpus_ds = corpus_ds.cast_column("_id", Value("string"))
+            corpus_ds = corpus_ds.rename_column("_id", "id")
+        elif "id" in corpus_ds.column_names:
+            corpus_ds = corpus_ds.cast_column("id", Value("string"))
+
         corpus_ds = corpus_ds.remove_columns(
             [
                 col
@@ -208,12 +214,18 @@ class HFDataLoader:
             queries_ds = load_dataset(
                 "json",
                 data_files=self.query_file,
+                split="train",  # ensure Dataset (not DatasetDict) for local files
                 streaming=self.streaming,
                 keep_in_memory=self.keep_in_memory,
             )
         queries_ds = cast(Dataset, queries_ds)
-        queries_ds = queries_ds.cast_column("_id", Value("string"))
-        queries_ds = queries_ds.rename_column("_id", "id")
+
+        if "_id" in queries_ds.column_names:
+            queries_ds = queries_ds.cast_column("_id", Value("string"))
+            queries_ds = queries_ds.rename_column("_id", "id")
+        elif "id" in queries_ds.column_names:
+            queries_ds = queries_ds.cast_column("id", Value("string"))
+
         queries_ds = queries_ds.remove_columns(
             [col for col in queries_ds.column_names if col not in ["id", "text"]]
         )
