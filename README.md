@@ -1,7 +1,6 @@
-# FinanceRAG: 金融領域檢索增強生成框架
+## FinanceRAG
 
-FinanceRAG 是一個專為金融領域設計的 RAG (Retrieval-Augmented Generation) 評測與執行框架。本專案整合了多種金融數據集（如 MultiHiertt, FinQA, TATQA 等），並提供從多模型檢索合併到雙階段重排序（Reranking）。
-
+FinanceRAG 是一個專為金融領域設計的 RAG 評測與執行框架。
 
 ### Environment Setup
 
